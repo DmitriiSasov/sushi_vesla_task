@@ -51,12 +51,15 @@ public class ArticleService {
         var category = repository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(
                 "Категория, куда надо добавить статью не найдена"));
 
-        writer.setFile(photo);
-        writer.setDirectory(uploadPath);
-        String savedFilename = writer.save();
+        String savedFilename = "";
+        if (photo != null && !photo.isEmpty()) {
+            writer.setFile(photo);
+            writer.setDirectory(uploadPath);
+            savedFilename = writer.save();
+        }
 
         if (header == null || description == null) {
-            throw new IllegalStateException("Некорректное состояние для новой статьи");
+            throw new IllegalStateException("Некорректное поля для новой статьи");
         }
         var newArticle = new Article();
         newArticle.setDescription(description);
