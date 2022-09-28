@@ -2,12 +2,12 @@ package com.example.proj.services;
 
 import com.example.proj.entities.Category;
 import com.example.proj.exceptions.CategoryNotFoundException;
+import com.example.proj.exceptions.ImageNotFoundException;
 import com.example.proj.my_file_utils.MyFileReader;
 import com.example.proj.my_file_utils.MyFileWriter;
 import com.example.proj.repositories.CategoryRepository;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,7 +62,7 @@ public class CategoryService {
         var category = repository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(
                 "Категорию с данным id не удалось найти"));
         if (category.getPhotoFilename().isEmpty()) {
-            throw new IllegalStateException("Для данной категории не задана фотография");
+            throw new ImageNotFoundException("Для данной категории не задана фотография");
         }
         reader.setParams(category.getPhotoFilename(), uploadPath);
         return reader.read();

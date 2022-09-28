@@ -2,19 +2,17 @@ package com.example.proj.services;
 
 import com.example.proj.entities.Article;
 import com.example.proj.exceptions.CategoryNotFoundException;
+import com.example.proj.exceptions.ImageNotFoundException;
 import com.example.proj.my_file_utils.MyFileReader;
 import com.example.proj.my_file_utils.MyFileWriter;
 import com.example.proj.repositories.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
@@ -76,7 +74,7 @@ public class ArticleService {
         var article= repository.findArticleInCategoryRepositoryById(articleId);
 
         if (article.getPhotoFilename().isEmpty()) {
-            throw new IllegalStateException("Для данной статьи не задана фотография");
+            throw new ImageNotFoundException("Для данной статьи не задана фотография");
         }
         reader.setParams(article.getPhotoFilename(), uploadPath);
         return reader.read();
